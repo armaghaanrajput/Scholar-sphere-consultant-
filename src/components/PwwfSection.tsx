@@ -120,7 +120,7 @@ export const PwwfSection: React.FC<PwwfSectionProps> = ({ onOpenPwwfForm }) => {
             {onOpenPwwfForm && (
               <button
                 onClick={onOpenPwwfForm}
-                className="w-full md:w-auto px-4 py-2.5 rounded-lg bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer group"
+                className="btn-3d btn-3d-amber w-full md:w-auto px-5 py-3 rounded-xl text-slate-950 font-black text-xs transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer group"
               >
                 <span>Open Scholarship Eligibility Form</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />

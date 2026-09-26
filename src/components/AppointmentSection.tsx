@@ -92,7 +92,7 @@ export const AppointmentSection: React.FC<AppointmentSectionProps> = ({ onOpenAp
 
             <button
               onClick={onOpenAppointmentForm}
-              className="w-full py-2.5 px-4 rounded-lg bg-[#FF7A00] hover:bg-[#e66e00] text-white font-black text-xs transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer group"
+              className="btn-3d btn-3d-orange w-full py-3 px-4 rounded-xl text-white font-black text-xs transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer group"
             >
               <span>Open Appointment Booking Form</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />

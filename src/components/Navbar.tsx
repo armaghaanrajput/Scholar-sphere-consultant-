@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrandLogo } from './BrandLogo';
 import { BRAND_CONTACT, FACEBOOK_PAGE_URL } from '../data/brandData';
 import { CURRENT_SESSION } from '../utils/academicSession';
-import { Phone, Menu, X, CalendarCheck, FileImage, Star, Tv } from 'lucide-react';
+import { Phone, Menu, X, CalendarCheck, FileImage, Star, UserCheck } from 'lucide-react';
 
 interface NavbarProps {
   onOpenBrandKit: () => void;
@@ -98,8 +98,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => scrollToSection('director-message')}
             className="hover:text-[#FF7A00] transition-colors py-1 cursor-pointer flex items-center gap-1"
           >
-            <Tv className="w-3.5 h-3.5 text-amber-500" />
-            <span>Director</span>
+            <UserCheck className="w-3.5 h-3.5 text-amber-500" />
+            <span>Director's Message</span>
           </button>
           <button
             onClick={() => scrollToSection('reviews')}
@@ -122,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
           <button
             onClick={onOpenBrandKit}
-            className="text-[11px] font-extrabold text-[#0A2342] bg-amber-50 border border-amber-200 hover:bg-amber-100 px-2.5 py-1 rounded transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+            className="btn-3d btn-3d-white text-[11px] font-black text-[#0A2342] px-2.5 py-1 rounded-lg flex items-center gap-1.5 cursor-pointer shadow-sm"
             title="Download Marketing Posters & PNG Ads"
           >
             <FileImage className="w-3.5 h-3.5 text-[#FF7A00]" />
@@ -130,18 +130,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </nav>
 
-        {/* Zone 3: Compact primary actions */}
+        {/* Zone 3: Compact 3D primary actions */}
         <div className="hidden sm:flex items-center gap-2">
           <button
             onClick={handleOpenAppointment}
-            className="px-3 py-1.5 text-xs font-bold text-slate-900 bg-amber-400 hover:bg-amber-500 rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
+            className="btn-3d btn-3d-amber px-3 py-1.5 text-xs font-black rounded-lg cursor-pointer flex items-center gap-1.5 shadow-sm"
           >
             <CalendarCheck className="w-3.5 h-3.5 text-slate-950" />
             <span>Book Appointment</span>
           </button>
           <button
             onClick={handleOpenApply}
-            className="px-3 py-1.5 text-xs font-bold text-white bg-[#0A2342] hover:bg-[#081b33] rounded-lg transition-colors cursor-pointer shadow-xs"
+            className="btn-3d btn-3d-navy px-3 py-1.5 text-xs font-black rounded-lg cursor-pointer shadow-sm"
           >
             Apply Now
           </button>
@@ -149,7 +149,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             href={FACEBOOK_PAGE_URL}
             target="_blank"
             rel="noreferrer"
-            className="p-1.5 rounded-lg bg-[#1877F2] hover:bg-blue-600 text-white transition-colors flex items-center justify-center shadow-xs"
+            className="btn-3d btn-3d-facebook p-1.5 rounded-lg flex items-center justify-center shadow-sm"
             title="Official Facebook Page"
           >
             <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -160,9 +160,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             href={`https://wa.me/923294403898?text=Hello%20Scholar%20Sphere%20Consultants,%20I%20am%20inquiring%20about%20admissions.`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-[#FF7A00] hover:bg-[#e66e00] rounded-lg transition-colors shadow-xs whitespace-nowrap"
+            className="btn-3d btn-3d-whatsapp px-3 py-1.5 text-xs font-black rounded-lg shadow-sm whitespace-nowrap flex items-center gap-1.5"
           >
-            <Phone className="w-3 h-3" />
+            <Phone className="w-3 h-3 text-[#052e16]" />
             <span>WhatsApp</span>
           </a>
         </div>
@@ -210,8 +210,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => scrollToSection('director-message')}
             className="block w-full text-left py-2 text-sm font-bold text-[#0A2342] hover:text-[#FF7A00] flex items-center gap-2"
           >
-            <Tv className="w-4 h-4 text-amber-500" />
-            <span>Director's Message &amp; Picture in Picture</span>
+            <UserCheck className="w-4 h-4 text-amber-500" />
+            <span>Director's Message &amp; Vision</span>
           </button>
           <button
             onClick={() => scrollToSection('reviews')}

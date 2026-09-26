@@ -1,547 +1,217 @@
-import React, { useState } from 'react';
-import { BRAND_CONTACT, OFFICIAL_COPY_STRINGS } from '../data/brandData';
+import React from 'react';
 import {
   Calculator,
   FileCheck2,
   Search,
-  CheckCircle2,
-  AlertCircle,
-  Phone,
-  Copy,
-  Check,
-  Printer,
-  ChevronDown,
-  ChevronUp,
   Sparkles,
-  Award,
-  ShieldAlert,
+  ArrowRight,
   ShieldCheck,
-  Building,
+  Award,
   GraduationCap,
+  ExternalLink,
 } from 'lucide-react';
+import { CURRENT_SESSION } from '../utils/academicSession';
 
-interface FaqItem {
-  question: string;
-  answer: string;
-  category: 'pwwf' | 'admissions' | 'verification' | 'location';
+interface OnlineStudentAssistantProps {
+  onOpenMatcher: () => void;
+  onOpenChecklist: () => void;
+  onOpenFaq: () => void;
 }
 
-const FAQS: FaqItem[] = [
-  {
-    question: 'What is the PWWF Scholarship and who qualifies in Punjab?',
-    answer: 'The Punjab Workers Welfare Fund (PWWF) provides 100% free higher education, full tuition fee reimbursement, university hostel expenses, and examination dues to children of registered factory, textile mill, and industrial establishment workers who hold an active Punjab Social Security (PESSI) or EOBI card.',
-    category: 'pwwf',
-  },
-  {
-    question: 'How do I verify if a nursing college is recognized by PNC (Pakistan Nursing Council)?',
-    answer: 'Always verify on the official portal at pnmc.gov.pk under recognized institutions. Ensure the college has an attached 200–500 bed clinical teaching hospital. You can also visit our Pattoki office on Main Multan Road for 100% free database verification.',
-    category: 'verification',
-  },
-  {
-    question: 'What are the minimum marks required for BS Nursing and DPT admissions?',
-    answer: 'For BS Nursing (Generic 4 Years), the minimum requirement is FSc Pre-Medical with at least 50% marks (550/1100). For Doctor of Physical Therapy (DPT) and Doctor of Pharmacy (Pharm-D), the minimum eligibility is 60% marks (660/1100) in FSc Pre-Medical.',
-    category: 'admissions',
-  },
-  {
-    question: 'Are Scholar Sphere Consultants counseling services free for students?',
-    answer: 'Yes, 100% free! We do not charge students or parents any consultation fees, file processing fees, or hidden commissions. We assist from form submission to admission confirmation completely free of charge.',
-    category: 'admissions',
-  },
-  {
-    question: 'Where is your office located in Pattoki?',
-    answer: 'Our permanent office is located at 1 KM Main Multan Road, Pattoki, Near Quaid-e-Azam Nursing College, District Kasur, Punjab. We are easily accessible from Mustafabad, Lalyani, Phool Nagar, Chunian, Kasur, and Lahore.',
-    category: 'location',
-  },
-  {
-    question: 'Do you process student visas for foreign countries?',
-    answer: 'No. Scholar Sphere Consultants operates strictly under a 100% No-Visa policy. We do not process foreign visas or student migration. We deal exclusively with recognized universities and colleges in Pakistan.',
-    category: 'verification',
-  },
-];
-
-export const OnlineStudentAssistant: React.FC = () => {
-  // Tabs: 'calculator' | 'checklist' | 'faq'
-  const [activeTool, setActiveTool] = useState<'calculator' | 'checklist' | 'faq'>('calculator');
-
-  // Merit Calculator State
-  const [fscMarks, setFscMarks] = useState<string>('750');
-  const [totalMarks, setTotalMarks] = useState<string>('1100');
-  const [isIndustrialWorker, setIsIndustrialWorker] = useState<boolean>(true);
-
-  // Checklist State
-  const [studentCategory, setStudentCategory] = useState<'pwwf' | 'regular'>('pwwf');
-  const [copiedChecklist, setCopiedChecklist] = useState<boolean>(false);
-
-  // FAQ Accordion State
-  const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
-  const [faqSearch, setFaqSearch] = useState<string>('');
-
-  // Calculations
-  const obtained = parseFloat(fscMarks) || 0;
-  const total = parseFloat(totalMarks) || 1100;
-  const percentage = total > 0 ? ((obtained / total) * 100).toFixed(1) : '0';
-  const numPercent = parseFloat(percentage);
-
-  // Dynamic eligibility recommendations
-  const getEligiblePrograms = () => {
-    if (numPercent >= 60) {
-      return [
-        { name: 'Doctor of Physical Therapy (DPT - 5 Years)', fit: 'High Fit (60%+ Required)' },
-        { name: 'Doctor of Pharmacy (Pharm-D - 5 Years)', fit: 'High Fit (60%+ Required)' },
-        { name: 'BS Nursing (Generic 4 Years - PNC)', fit: 'Direct Merit Admission' },
-        { name: 'BS Medical Imaging (MIT)', fit: 'Top Merit Eligible' },
-        { name: 'BS Medical Lab Technology (MLT)', fit: 'Direct Merit Admission' },
-      ];
-    } else if (numPercent >= 50) {
-      return [
-        { name: 'BS Nursing (Generic 4 Years - PNC)', fit: 'Eligible (50%+ Required)' },
-        { name: 'BS Medical Lab Technology (MLT)', fit: 'Eligible (50%+ Required)' },
-        { name: 'BS Operation Theater & Anesthesia', fit: 'Eligible (50%+ Required)' },
-        { name: 'BS Computer Science / IT', fit: 'Eligible (50%+ Required)' },
-        { name: 'BS Psychology & Biotechnology', fit: 'Eligible' },
-      ];
-    } else {
-      return [
-        { name: 'Clinical Diplomas / Allied Technician Certifications', fit: 'Eligible (Matric / FSc)' },
-        { name: 'Improvement Exam Advisory & Private Degree Options', fit: 'Recommended' },
-      ];
-    }
-  };
-
-  const copyChecklistToClipboard = () => {
-    const listText = `📋 OFFICIAL ADMISSION & DOCUMENT CHECKLIST — SCHOLAR SPHERE CONSULTANTS
-📍 1 KM Main Multan Road, Pattoki (Near Quaid-e-Azam Nursing College)
-📞 Contact: +92 329 4403898 | Email: scholarsphereconsultant@gmail.com
-
-Required Documents for ${studentCategory === 'pwwf' ? '100% PWWF Scholarship & Admission' : 'Standard University Admission'}:
-1. Matric Result Card / Sanad (3 Attested Photocopies)
-2. FSc Pre-Medical / Pre-Engineering Result Card (3 Attested Photocopies)
-3. Student CNIC or NADRA B-Form Copy (3 Photocopies)
-4. Father / Guardian CNIC Copy (3 Photocopies)
-5. Punjab Domicile Certificate (Kasur / Punjab District)
-6. 8 Passport-Size Photographs (Sky Blue Background)
-${studentCategory === 'pwwf' ? `7. Father/Mother Punjab Social Security (PESSI) Card OR EOBI Registration Card
-8. Employer / Factory Service Certificate on Official Company Letterhead
-9. Attested Salary Slip / Wage Certificate from Mill / Factory` : ''}
-
-📌 Bring all original documents to our Pattoki office for free verification!`;
-
-    navigator.clipboard.writeText(listText);
-    setCopiedChecklist(true);
-    setTimeout(() => setCopiedChecklist(false), 2500);
-  };
-
-  const filteredFaqs = FAQS.filter(
-    (faq) =>
-      faq.question.toLowerCase().includes(faqSearch.toLowerCase()) ||
-      faq.answer.toLowerCase().includes(faqSearch.toLowerCase())
-  );
-
+export const OnlineStudentAssistant: React.FC<OnlineStudentAssistantProps> = ({
+  onOpenMatcher,
+  onOpenChecklist,
+  onOpenFaq,
+}) => {
   return (
-    <section id="assistant" className="py-8 sm:py-10 bg-white border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <section id="assistant" className="py-16 sm:py-20 bg-white border-t border-b border-slate-200 relative overflow-hidden">
+      {/* Decorative Brand Circles */}
+      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-amber-400/10 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-[#0A2342]/5 blur-3xl pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-emerald-100 border border-emerald-300 text-emerald-900 text-[11px] font-bold mb-2">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Online Student Admissions Assistant</span>
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-black uppercase tracking-wider mb-3 border border-amber-300 shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-[#FF7A00]" />
+            <span>Interactive Student Portals • Session {CURRENT_SESSION.slash}</span>
           </div>
           <h2
-            className="text-2xl sm:text-3xl font-black text-[#0A2342] tracking-tight text-balance"
-            style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
+            className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0A2342] tracking-tight"
+            style={{ fontFamily: "'Cabinet Grotesk', 'Plus Jakarta Sans', sans-serif" }}
           >
-            Interactive Tools for Students & Parents in Punjab
+            Online Student Admissions Assistant &amp; Tools
           </h2>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-            Calculate your FSc admission merit, generate your official admission document checklist, or find verified answers to common admission questions.
+          <p className="mt-2.5 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Dedicated standalone portals designed for Punjab students and industrial worker families. Choose a tool below to open its dedicated full-screen page.
           </p>
         </div>
 
-        {/* Tool Selector Tabs */}
-        <div className="flex justify-center mb-5">
-          <div className="inline-flex p-1 bg-slate-100 rounded-lg border border-slate-200 text-xs font-bold">
-            <button
-              onClick={() => setActiveTool('calculator')}
-              className={`px-4 py-2.5 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                activeTool === 'calculator'
-                  ? 'bg-[#0A2342] text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Calculator className="w-4 h-4 text-[#FF7A00]" />
-              <span>FSc Merit & Degree Matcher</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTool('checklist')}
-              className={`px-4 py-2.5 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                activeTool === 'checklist'
-                  ? 'bg-[#0A2342] text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <FileCheck2 className="w-4 h-4 text-emerald-500" />
-              <span>Document Checklist Builder</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTool('faq')}
-              className={`px-4 py-2.5 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                activeTool === 'faq'
-                  ? 'bg-[#0A2342] text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Search className="w-4 h-4 text-amber-500" />
-              <span>Google Search & FAQ Desk</span>
-            </button>
-          </div>
-        </div>
-
-        {/* TOOL 1: MERIT CALCULATOR & DEGREE MATCHER */}
-        {activeTool === 'calculator' && (
-          <div className="max-w-4xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-              
-              {/* Inputs */}
-              <div className="md:col-span-6 space-y-4">
-                <h3 className="text-base font-bold text-[#0A2342] flex items-center gap-2">
-                  <Calculator className="w-5 h-5 text-[#FF7A00]" />
-                  <span>Enter Your Intermediate (FSc) Marks</span>
-                </h3>
-
-                <div>
-                  <label className="text-xs font-semibold text-slate-700 block mb-1">
-                    Obtained Marks in FSc Pre-Medical
-                  </label>
-                  <input
-                    type="number"
-                    value={fscMarks}
-                    onChange={(e) => setFscMarks(e.target.value)}
-                    placeholder="e.g. 750"
-                    min="0"
-                    max="1100"
-                    className="w-full p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#FF7A00] text-sm font-bold text-slate-800 bg-white"
-                  />
+        {/* 3 Prominent Dedicated Portal Cards / Launchers (Only Buttons on Main Page) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          
+          {/* Card 1: FSc Merit & Degree Matcher */}
+          <div className="bg-slate-50 rounded-3xl border-2 border-slate-200 hover:border-amber-400 transition-all p-6 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-lg group">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-900 border-2 border-amber-300 flex items-center justify-center font-bold shadow-xs">
+                  <Calculator className="w-6 h-6 text-[#FF7A00]" />
                 </div>
-
-                <div>
-                  <label className="text-xs font-semibold text-slate-700 block mb-1">
-                    Total FSc Marks (Usually 1100)
-                  </label>
-                  <input
-                    type="number"
-                    value={totalMarks}
-                    onChange={(e) => setTotalMarks(e.target.value)}
-                    placeholder="1100"
-                    min="1"
-                    className="w-full p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#FF7A00] text-sm text-slate-800 bg-white"
-                  />
-                </div>
-
-                <div className="p-3.5 bg-white rounded-xl border border-slate-200">
-                  <span className="text-xs font-semibold text-slate-800 block mb-1.5">
-                    Parent Employment Status:
-                  </span>
-                  <div className="space-y-1.5 text-xs text-slate-700">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="worker_status"
-                        checked={isIndustrialWorker}
-                        onChange={() => setIsIndustrialWorker(true)}
-                        className="accent-[#FF7A00]"
-                      />
-                      <span>Registered Industrial / Factory Worker (PWWF Eligible)</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="worker_status"
-                        checked={!isIndustrialWorker}
-                        onChange={() => setIsIndustrialWorker(false)}
-                        className="accent-[#FF7A00]"
-                      />
-                      <span>Private / Self-Employed / Other</span>
-                    </label>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
-                  <div>
-                    <span className="text-xs text-slate-500 font-semibold block">Calculated Percentage</span>
-                    <span className="text-3xl font-black text-[#0A2342]" style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}>
-                      {percentage}%
-                    </span>
-                  </div>
-                  <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-                    numPercent >= 60
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : numPercent >= 50
-                      ? 'bg-amber-100 text-amber-800'
-                      : 'bg-red-100 text-red-800'
-                  }`}>
-                    {numPercent >= 60 ? 'First Division' : numPercent >= 50 ? 'Second Division' : 'Needs Review'}
-                  </span>
-                </div>
+                <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-amber-200/80 text-amber-950 border border-amber-300">
+                  Instant Matcher
+                </span>
               </div>
 
-              {/* Matching Output */}
-              <div className="md:col-span-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-[#0A2342] uppercase tracking-wider">
-                    Eligible Degree Programs (2026–27)
-                  </h3>
-                  <span className="text-[11px] text-slate-400 font-mono">Real Criteria</span>
-                </div>
-
-                <div className="space-y-2">
-                  {getEligiblePrograms().map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between gap-2 shadow-xs"
-                    >
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                        <span className="text-xs font-bold text-slate-800">{item.name}</span>
-                      </div>
-                      <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded whitespace-nowrap">
-                        {item.fit}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {isIndustrialWorker && numPercent >= 50 && (
-                  <div className="p-4 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 text-xs">
-                    <div className="flex items-center gap-2 font-bold mb-1 text-amber-900">
-                      <Award className="w-4 h-4 text-amber-700" />
-                      <span>100% Free Tuition & Hostel Coverage Active</span>
-                    </div>
-                    <p className="text-amber-900 leading-relaxed">
-                      With {percentage}%, you fulfill both the academic merit and PWWF grant requirement. You are eligible for zero-fee study!
-                    </p>
-                  </div>
-                )}
-
-                <a
-                  href={`https://wa.me/923294403898?text=Hello%20Scholar%20Sphere,%20I%20used%20your%20Merit%20Calculator:%20I%20have%20${fscMarks}/${totalMarks}%20(${percentage}%%20marks).%20Parent%20is%20${isIndustrialWorker ? 'Factory%20Worker' : 'Non-factory'}.%20Please%20guide%20me.`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-full py-3 px-4 rounded-xl bg-[#0A2342] hover:bg-[#081b33] text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm cursor-pointer"
-                >
-                  <Phone className="w-4 h-4 text-[#FF7A00]" />
-                  <span>Discuss My Admission Merit on WhatsApp</span>
-                </a>
-              </div>
-
-            </div>
-          </div>
-        )}
-
-        {/* TOOL 2: DOCUMENT CHECKLIST BUILDER */}
-        {activeTool === 'checklist' && (
-          <div className="max-w-3xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-              <div>
-                <h3 className="text-base font-bold text-[#0A2342] flex items-center gap-2">
-                  <FileCheck2 className="w-5 h-5 text-emerald-600" />
-                  <span>Required Admission Documents Checklist</span>
-                </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Prepare these documents before visiting our Pattoki office.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setStudentCategory('pwwf')}
-                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
-                    studentCategory === 'pwwf'
-                      ? 'bg-[#0A2342] text-white'
-                      : 'bg-white text-slate-700 border border-slate-200'
-                  }`}
-                >
-                  PWWF Scholarship
-                </button>
-                <button
-                  onClick={() => setStudentCategory('regular')}
-                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
-                    studentCategory === 'regular'
-                      ? 'bg-[#0A2342] text-white'
-                      : 'bg-white text-slate-700 border border-slate-200'
-                  }`}
-                >
-                  Regular Admission
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-3 mb-6 text-xs">
-              <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-start gap-3">
-                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-800 font-bold flex items-center justify-center text-[11px] shrink-0 mt-0.5">1</span>
-                <div>
-                  <strong className="text-slate-900 block font-bold">Matriculation Result Card & Sanad</strong>
-                  <p className="text-slate-500">3 verified/attested photocopies from BISE Lahore / Multan / Sahiwal.</p>
-                </div>
-              </div>
-
-              <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-start gap-3">
-                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-800 font-bold flex items-center justify-center text-[11px] shrink-0 mt-0.5">2</span>
-                <div>
-                  <strong className="text-slate-900 block font-bold">Intermediate (FSc Pre-Medical) Certificate</strong>
-                  <p className="text-slate-500">3 verified/attested photocopies of Part 1 & Part 2 result cards.</p>
-                </div>
-              </div>
-
-              <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-start gap-3">
-                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-800 font-bold flex items-center justify-center text-[11px] shrink-0 mt-0.5">3</span>
-                <div>
-                  <strong className="text-slate-900 block font-bold">Student CNIC or NADRA B-Form</strong>
-                  <p className="text-slate-500">3 photocopies of valid CNIC (or B-Form if under 18).</p>
-                </div>
-              </div>
-
-              <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-start gap-3">
-                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-800 font-bold flex items-center justify-center text-[11px] shrink-0 mt-0.5">4</span>
-                <div>
-                  <strong className="text-slate-900 block font-bold">Father / Guardian CNIC</strong>
-                  <p className="text-slate-500">3 photocopies of valid National Identity Card.</p>
-                </div>
-              </div>
-
-              <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-start gap-3">
-                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-800 font-bold flex items-center justify-center text-[11px] shrink-0 mt-0.5">5</span>
-                <div>
-                  <strong className="text-slate-900 block font-bold">Punjab Domicile Certificate</strong>
-                  <p className="text-slate-500">District Kasur, Lahore, Okara, or any Punjab district domicile copy.</p>
-                </div>
-              </div>
-
-              <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-start gap-3">
-                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-800 font-bold flex items-center justify-center text-[11px] shrink-0 mt-0.5">6</span>
-                <div>
-                  <strong className="text-slate-900 block font-bold">8 Passport-Size Photographs</strong>
-                  <p className="text-slate-500">Standard blue background pictures (2 attested on back, 6 plain).</p>
-                </div>
-              </div>
-
-              {studentCategory === 'pwwf' && (
-                <>
-                  <div className="p-3 bg-amber-50 rounded-xl border border-amber-300 flex items-start gap-3">
-                    <span className="w-5 h-5 rounded-full bg-amber-200 text-amber-900 font-bold flex items-center justify-center text-[11px] shrink-0 mt-0.5">7</span>
-                    <div>
-                      <strong className="text-amber-950 block font-bold">Punjab Social Security (PESSI) or EOBI Card</strong>
-                      <p className="text-amber-900">Original card plus 3 photocopies showing father&#39;s registered employee number.</p>
-                    </div>
-                  </div>
-
-                  <div className="p-3 bg-amber-50 rounded-xl border border-amber-300 flex items-start gap-3">
-                    <span className="w-5 h-5 rounded-full bg-amber-200 text-amber-900 font-bold flex items-center justify-center text-[11px] shrink-0 mt-0.5">8</span>
-                    <div>
-                      <strong className="text-amber-950 block font-bold">Factory / Mill Service Certificate</strong>
-                      <p className="text-amber-900">Official letter from company management certifying employment duration and designation.</p>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-200">
-              <button
-                onClick={copyChecklistToClipboard}
-                className="px-4 py-2 text-xs font-bold text-[#0A2342] bg-white border border-slate-300 rounded-lg hover:bg-slate-100 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
-              >
-                {copiedChecklist ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4 text-[#FF7A00]" />}
-                <span>{copiedChecklist ? 'Checklist Copied!' : 'Copy Checklist to Clipboard'}</span>
-              </button>
-
-              <a
-                href="https://wa.me/923294403898?text=Hello%20Scholar%20Sphere,%20I%20have%20prepared%20my%20documents%20and%20want%20to%20visit%20your%20Pattoki%20office%20for%20admission%20verification."
-                target="_blank"
-                rel="noreferrer"
-                className="px-4 py-2 text-xs font-bold text-white bg-[#0A2342] hover:bg-[#081b33] rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
-              >
-                <Phone className="w-4 h-4 text-[#FF7A00]" />
-                <span>Notify Office on WhatsApp</span>
-              </a>
-            </div>
-          </div>
-        )}
-
-        {/* TOOL 3: GOOGLE SEARCH & FAQ DESK */}
-        {activeTool === 'faq' && (
-          <div className="max-w-3xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
-            <div className="mb-6">
-              <h3 className="text-base font-bold text-[#0A2342] flex items-center gap-2 mb-2">
-                <Search className="w-5 h-5 text-[#FF7A00]" />
-                <span>Frequently Searched Admission Queries</span>
+              <h3 className="text-lg sm:text-xl font-black text-[#0A2342] group-hover:text-[#FF7A00] transition-colors">
+                FSc Merit &amp; Degree Matcher
               </h3>
               
-              {/* Search Bar */}
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search questions (e.g. PWWF, nursing, fee, location, fake colleges)..."
-                  value={faqSearch}
-                  onChange={(e) => setFaqSearch(e.target.value)}
-                  className="w-full p-2.5 pl-9 rounded-xl border border-slate-300 focus:outline-none focus:border-[#FF7A00] text-xs bg-white"
-                />
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-              </div>
+              <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+                Enter your obtained marks to calculate aggregate percentage, identify eligible BS Nursing, Pharm-D, DPT, and Allied Health programs, and check 100% PWWF fee waiver status.
+              </p>
+
+              {/* Highlights */}
+              <ul className="mt-4 space-y-1.5 text-xs text-slate-600 border-t border-slate-200 pt-3">
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                  <span>Real-time aggregate percentage &amp; division</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                  <span>PNC &amp; HEC minimum threshold checks</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                  <span>Printable official merit assessment slip</span>
+                </li>
+              </ul>
             </div>
 
-            {/* Accordion List */}
-            <div className="space-y-3">
-              {filteredFaqs.map((faq, idx) => {
-                const isOpen = openFaqIdx === idx;
-                return (
-                  <div
-                    key={idx}
-                    className="bg-white rounded-xl border border-slate-200 overflow-hidden transition-all"
-                  >
-                    <button
-                      onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
-                      className="w-full p-4 text-left flex items-center justify-between gap-4 text-xs sm:text-sm font-bold text-[#0A2342] hover:text-[#FF7A00] transition-colors cursor-pointer"
-                    >
-                      <span>{faq.question}</span>
-                      {isOpen ? (
-                        <ChevronUp className="w-4 h-4 text-slate-400 shrink-0" />
-                      ) : (
-                        <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
-                      )}
-                    </button>
-
-                    {isOpen && (
-                      <div className="px-4 pb-4 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <p>{faq.answer}</p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-
-              {filteredFaqs.length === 0 && (
-                <div className="p-6 text-center text-xs text-slate-500 bg-white rounded-xl border border-slate-200">
-                  No matching query found. Have a custom question? Contact Armaghaan Rajput directly on WhatsApp at +92 329 4403898.
-                </div>
-              )}
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
-              <span>Need custom advice?</span>
-              <a
-                href="https://wa.me/923294403898"
-                target="_blank"
-                rel="noreferrer"
-                className="font-bold text-[#0A2342] hover:text-[#FF7A00]"
+            <div className="mt-6 pt-4 border-t border-slate-200">
+              <button
+                onClick={onOpenMatcher}
+                className="btn-3d btn-3d-amber w-full py-3.5 px-4 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-2 shadow-md cursor-pointer group/btn"
               >
-                Ask Armaghaan Rajput on WhatsApp →
-              </a>
+                <Calculator className="w-4 h-4 text-slate-950" />
+                <span>Open FSc Merit &amp; Degree Matcher</span>
+                <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+              </button>
             </div>
           </div>
-        )}
+
+          {/* Card 2: Document Checklist Builder */}
+          <div className="bg-slate-50 rounded-3xl border-2 border-slate-200 hover:border-emerald-400 transition-all p-6 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-lg group">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-900 border-2 border-emerald-300 flex items-center justify-center font-bold shadow-xs">
+                  <FileCheck2 className="w-6 h-6 text-emerald-600" />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-200/80 text-emerald-950 border border-emerald-300">
+                  Dossier Builder
+                </span>
+              </div>
+
+              <h3 className="text-lg sm:text-xl font-black text-[#0A2342] group-hover:text-emerald-700 transition-colors">
+                Document Checklist Builder
+              </h3>
+              
+              <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+                Generate and track required certificates for regular university admission or 100% PWWF worker scholarship filing before visiting our Pattoki office.
+              </p>
+
+              {/* Highlights */}
+              <ul className="mt-4 space-y-1.5 text-xs text-slate-600 border-t border-slate-200 pt-3">
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  <span>Interactive document readiness tracker</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  <span>PESSI Social Security &amp; EOBI checklist</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  <span>One-click copy &amp; printable dossier summary</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-slate-200">
+              <button
+                onClick={onOpenChecklist}
+                className="btn-3d btn-3d-navy w-full py-3.5 px-4 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-2 shadow-md cursor-pointer group/btn text-white"
+              >
+                <FileCheck2 className="w-4 h-4 text-emerald-400" />
+                <span>Open Document Checklist Builder</span>
+                <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+
+          {/* Card 3: Google Search & FAQ Desk */}
+          <div className="bg-slate-50 rounded-3xl border-2 border-slate-200 hover:border-blue-400 transition-all p-6 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-lg group">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-900 border-2 border-blue-300 flex items-center justify-center font-bold shadow-xs">
+                  <Search className="w-6 h-6 text-blue-600" />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-200/80 text-blue-950 border border-blue-300">
+                  Search &amp; FAQs
+                </span>
+              </div>
+
+              <h3 className="text-lg sm:text-xl font-black text-[#0A2342] group-hover:text-blue-700 transition-colors">
+                Google Search &amp; FAQ Desk
+              </h3>
+              
+              <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+                Direct lookup of verified admissions FAQs, PNC &amp; PHEC accreditation registries, anti-fraud guides, and direct WhatsApp question submission to Director Armaghaan Rajput.
+              </p>
+
+              {/* Highlights */}
+              <ul className="mt-4 space-y-1.5 text-xs text-slate-600 border-t border-slate-200 pt-3">
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                  <span>Instant live search across admissions questions</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                  <span>Official PNC &amp; Punjab e-portal links</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                  <span>Direct submission to Director's desk</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-slate-200">
+              <button
+                onClick={onOpenFaq}
+                className="btn-3d btn-3d-orange w-full py-3.5 px-4 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-2 shadow-md cursor-pointer group/btn text-white"
+              >
+                <Search className="w-4 h-4 text-white" />
+                <span>Open Google Search &amp; FAQ Desk</span>
+                <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Micro Trust Banner at bottom of section */}
+        <div className="mt-10 p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 text-center sm:text-left">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>
+              All tools run on 100% official Punjab Higher Education &amp; PNC regulatory standards with zero service charges.
+            </span>
+          </div>
+          <span className="font-bold text-[#0A2342] shrink-0">
+            Head Office: 1 KM Main Multan Road, Pattoki
+          </span>
+        </div>
 
       </div>
     </section>

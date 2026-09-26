@@ -13,7 +13,7 @@ import {
   MapPin,
   CalendarCheck,
   Star,
-  Tv,
+  UserCheck,
 } from 'lucide-react';
 
 interface HeroSectionProps {
@@ -110,11 +110,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
             </div>
 
-            {/* Action Buttons - Compact Grid */}
-            <div className="flex flex-wrap items-center gap-2 pt-1">
+            {/* Action Buttons - 3D Tactile Grid */}
+            <div className="flex flex-wrap items-center gap-2.5 pt-2">
               <button
                 onClick={onBookAppointment}
-                className="px-4 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs transition-all shadow-xs flex items-center gap-1.5 cursor-pointer group"
+                className="btn-3d btn-3d-amber px-4 py-2.5 rounded-xl text-slate-950 font-black text-xs shadow-md cursor-pointer group flex items-center gap-1.5"
               >
                 <CalendarCheck className="w-4 h-4 text-slate-950" />
                 <span>Book Appointment</span>
@@ -122,7 +122,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
               <button
                 onClick={onOpenStudentForm}
-                className="px-4 py-2.5 rounded-lg bg-[#0A2342] hover:bg-[#081b33] text-white font-bold text-xs transition-all shadow-xs flex items-center gap-1.5 cursor-pointer group border border-slate-700"
+                className="btn-3d btn-3d-navy px-4 py-2.5 rounded-xl text-white font-black text-xs shadow-md cursor-pointer group flex items-center gap-1.5"
               >
                 <span className="w-2 h-2 rounded-full bg-[#FF7A00] animate-pulse" />
                 <span>Student Form (All-In-One)</span>
@@ -131,7 +131,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
               <button
                 onClick={onCheckPwwf}
-                className="px-3.5 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                className="btn-3d btn-3d-white px-3.5 py-2.5 rounded-xl text-slate-900 font-black text-xs shadow-md flex items-center gap-1.5 cursor-pointer"
               >
                 <Award className="w-3.5 h-3.5 text-amber-600" />
                 <span>PWWF 100% Free</span>
@@ -139,7 +139,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
               <button
                 onClick={onExplorePrograms}
-                className="px-3.5 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                className="btn-3d btn-3d-white px-3.5 py-2.5 rounded-xl text-slate-900 font-black text-xs shadow-md flex items-center gap-1.5 cursor-pointer"
               >
                 <GraduationCap className="w-3.5 h-3.5 text-[#FF7A00]" />
                 <span>Degree Programs</span>
@@ -147,7 +147,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
               <button
                 onClick={onVerifyCollege}
-                className="px-3 py-2.5 rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="btn-3d btn-3d-white px-3 py-2.5 rounded-xl text-slate-800 font-bold text-xs shadow-md flex items-center gap-1.5 cursor-pointer"
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Verify College</span>
@@ -158,10 +158,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   const el = document.getElementById('director-message');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="px-3.5 py-2.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-950 font-bold text-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="btn-3d btn-3d-white px-3.5 py-2.5 rounded-xl text-[#0A2342] font-black text-xs shadow-md flex items-center gap-1.5 cursor-pointer"
               >
-                <Tv className="w-3.5 h-3.5 text-amber-600" />
-                <span>Director's Message (PiP)</span>
+                <UserCheck className="w-3.5 h-3.5 text-amber-600" />
+                <span>Director's Message</span>
               </button>
             </div>
 

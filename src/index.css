@@ -10,6 +10,137 @@
   }
 }
 
+/* ==========================================================================
+   Tactile 3D Buttons & Click Feedback System
+   ========================================================================== */
+.btn-3d {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  transition: transform 0.08s ease-in-out, box-shadow 0.08s ease-in-out, filter 0.15s ease;
+  cursor: pointer;
+  user-select: none;
+  border-style: solid;
+  border-width: 1px 1px 4px 1px;
+}
+
+.btn-3d:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.btn-3d:active {
+  transform: translateY(3px) !important;
+  border-bottom-width: 1px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 3D Navy (Executive Brand) */
+.btn-3d-navy {
+  background: linear-gradient(180deg, #153c6e 0%, #0A2342 100%);
+  color: #ffffff;
+  border-color: #06182e #06182e #020912 #06182e;
+  box-shadow: 0 4px 0 #020912, 0 8px 16px rgba(10, 35, 66, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.btn-3d-navy:hover {
+  background: linear-gradient(180deg, #1b4985 0%, #0d2d54 100%);
+  box-shadow: 0 5px 0 #020912, 0 10px 18px rgba(10, 35, 66, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* 3D Amber / Gold (High Priority CTA) */
+.btn-3d-amber {
+  background: linear-gradient(180deg, #fcd34d 0%, #f59e0b 100%);
+  color: #0f172a;
+  border-color: #d97706 #d97706 #92400e #d97706;
+  box-shadow: 0 4px 0 #92400e, 0 8px 16px rgba(217, 119, 6, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+.btn-3d-amber:hover {
+  background: linear-gradient(180deg, #fde68a 0%, #fbbf24 100%);
+  box-shadow: 0 5px 0 #92400e, 0 10px 18px rgba(217, 119, 6, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+/* 3D Scholar Orange */
+.btn-3d-orange {
+  background: linear-gradient(180deg, #ff9429 0%, #FF7A00 100%);
+  color: #ffffff;
+  border-color: #ea580c #ea580c #9a3412 #ea580c;
+  box-shadow: 0 4px 0 #9a3412, 0 8px 16px rgba(255, 122, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.btn-3d-orange:hover {
+  background: linear-gradient(180deg, #ffa84d 0%, #ff8514 100%);
+  box-shadow: 0 5px 0 #9a3412, 0 10px 18px rgba(255, 122, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+/* 3D WhatsApp Emerald */
+.btn-3d-whatsapp {
+  background: linear-gradient(180deg, #34d975 0%, #25D366 100%);
+  color: #052e16;
+  border-color: #16a34a #16a34a #14532d #16a34a;
+  box-shadow: 0 4px 0 #14532d, 0 8px 16px rgba(37, 211, 102, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.btn-3d-whatsapp:hover {
+  background: linear-gradient(180deg, #4ce086 0%, #29e06e 100%);
+  box-shadow: 0 5px 0 #14532d, 0 10px 18px rgba(37, 211, 102, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* 3D Facebook Royal Blue */
+.btn-3d-facebook {
+  background: linear-gradient(180deg, #3b8cf8 0%, #1877F2 100%);
+  color: #ffffff;
+  border-color: #1d4ed8 #1d4ed8 #1e3a8a #1d4ed8;
+  box-shadow: 0 4px 0 #1e3a8a, 0 8px 16px rgba(24, 119, 242, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.btn-3d-facebook:hover {
+  background: linear-gradient(180deg, #519aff 0%, #2781f7 100%);
+  box-shadow: 0 5px 0 #1e3a8a, 0 10px 18px rgba(24, 119, 242, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+/* 3D Clean White / Elevated Card Button */
+.btn-3d-white {
+  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+  color: #0f172a;
+  border-color: #cbd5e1 #cbd5e1 #64748b #cbd5e1;
+  box-shadow: 0 4px 0 #64748b, 0 6px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 #ffffff;
+}
+.btn-3d-white:hover {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 0 5px 0 #64748b, 0 8px 14px rgba(0, 0, 0, 0.12), inset 0 1px 0 #ffffff;
+}
+
+/* 3D Segmented Control / Toggle Tabs */
+.tab-3d {
+  position: relative;
+  border-style: solid;
+  border-width: 1px 1px 3px 1px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  user-select: none;
+}
+.tab-3d:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+}
+.tab-3d-active {
+  background: linear-gradient(180deg, #153c6e 0%, #0A2342 100%);
+  color: #ffffff;
+  border-color: #06182e #06182e #020912 #06182e;
+  box-shadow: 0 3px 0 #020912, inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+.tab-3d-inactive {
+  background: #f8fafc;
+  color: #475569;
+  border-color: #e2e8f0 #e2e8f0 #cbd5e1 #e2e8f0;
+  box-shadow: 0 2px 0 #cbd5e1, inset 0 1px 0 #ffffff;
+}
+.tab-3d-inactive:hover {
+  background: #ffffff;
+  color: #0f172a;
+}
+
 @media print {
   body {
     background: #ffffff !important;
@@ -32,3 +163,4 @@
     size: auto;
   }
 }
+
